@@ -1,0 +1,19 @@
+$icon-layout: smart;
+$icon-spacing: 3px;
+@import "icon/*.png";
+@import "icongray/*.png";
+.item{
+	@include all-icongray-sprites;
+}
+.item.got{
+	@include all-icon-sprites;
+}
+.itemIcon{
+	width:28px;
+	height:28px;
+	padding:1px 2px;
+	opacity:0.7;
+}
+.got .itemIcon{
+	opacity:1;
+}
