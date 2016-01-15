@@ -46,7 +46,7 @@ $(function(){
 	var $dropArea = $("#area .droparea");
 	var autoDropTimer = null;
 	var autoFlag = false;
-	var veryHardEvent = false;
+	var veryHardEvent = $("#veryHardEvent input").prop("checked");
 	var count = 0;
 	var rank = judgeRank($("#rank").val());
 	
