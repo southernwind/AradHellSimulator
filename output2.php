@@ -36,7 +36,8 @@
 			foreach($val2 as $key3 => $val3){
 ?>
 					<div class="item">
-						<div class="itemIcon icon-<?=$val3["id"]?> icongray-<?=$val3["id"]?>" title="<?=$val3["name"]?>"><?=$val3["name"]?></div>
+						<div class="itemIcon icon-<?=$val3["id"]?> icongray-<?=$val3["id"]?>" title="<?=$val3["name"]?> (0 / 1000)"><?=$val3["name"]?></div>
+						<div class="epicBitBar" id="bit-<?=$val3["id"]?>"><span></span></div>
 					</div>
 <?php
 			}
@@ -80,7 +81,8 @@
 		foreach($val as $key2 => $val2){
 ?>
 				<div class="item">
-					<div class="itemIcon icon-<?=$val2["id"]?> icongray-<?=$val2["id"]?>" title="<?=$val2["name"]?>"><?=$val2["name"]?></div>
+					<div class="itemIcon icon-<?=$val2["id"]?> icongray-<?=$val2["id"]?>" title="<?=$val2["name"]?> (0 / 1000)"><?=$val2["name"]?></div>
+					<div class="epicBitBar" id="bit-<?=$val2["id"]?>"><span></span></div>
 				</div>
 <?php
 		}
@@ -122,7 +124,8 @@
 		foreach($val as $key2 => $val2){
 ?>
 				<div class="item">
-					<div class="itemIcon icon-<?=$val2["id"]?> icongray-<?=$val2["id"]?>" title="<?=$val2["name"]?>"><?=$val2["name"]?></div>
+					<div class="itemIcon icon-<?=$val2["id"]?> icongray-<?=$val2["id"]?>" title="<?=$val2["name"]?> (0 / 1000)"><?=$val2["name"]?></div>
+					<div class="epicBitBar" id="bit-<?=$val2["id"]?>"><span></span></div>
 				</div>
 <?php
 		}
@@ -164,7 +167,8 @@
 		foreach($val as $key2 => $val2){
 ?>
 				<div class="item">
-					<div class="itemIcon icon-<?=$val2["id"]?> icongray-<?=$val2["id"]?>" title="<?=$val2["name"]?>"><?=$val2["name"]?></div>
+					<div class="itemIcon icon-<?=$val2["id"]?> icongray-<?=$val2["id"]?>" title="<?=$val2["name"]?> (0 / 1000)"><?=$val2["name"]?></div>
+					<div class="epicBitBar" id="bit-<?=$val2["id"]?>"><span></span></div>
 				</div>
 <?php
 		}

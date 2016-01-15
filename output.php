@@ -1,8 +1,9 @@
 var ItemRank = {
-	Epic:"エピック", //3
-	Legacy:"レガシー",//2
+	Uncommon:"アンコモン", //0
 	Rare:"レア", //1
-	Uncommon:"アンコモン" //0
+	Legacy:"レガシー",//2
+	Epic:"エピック", //3
+	EpicBit:"エピックのかけら" //4
 };
 var ItemType = {
 	Weapons:{
@@ -85,51 +86,9 @@ var ItemType = {
 	}
 };
 
+var ItemList = {
 <?php
 	require("../private/dbdata.php");
-	
-	//uncommon
-	$stmt = $dbh->prepare("
-		SELECT 
-			i.id,
-			i.lv,
-			ir.code as rank,
-			it.code as type,
-			i.name,
-			CONCAT(ir.class,\" \",it.class) as class
-		FROM 
-			item as i
-		LEFT OUTER JOIN
-			itemrank as ir
-			ON i.rank=ir.id
-		LEFT OUTER JOIN
-			itemtype as it
-			ON i.type=it.id
-		WHERE
-			i.rank=0
-		ORDER BY
-			i.type,
-			i.lv;
-	");
-	$stmt->execute();
-?>
-var UncommonList = [
-<?php
-	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
-?>
-	{
-		Id:<?=$col['id']?>,
-		Rank:<?=$col['rank']?>,
-		Lv:<?=$col['lv']?>,
-		Name:"<?=$col['name']?>",
-		Type:<?=$col['type']?>,
-		Class:"<?=$col['class']?>"
-	},
-<?php
-	}
-?>
-];
-<?php
 		//rare
 		$stmt = $dbh->prepare("
 		SELECT 
@@ -155,64 +114,22 @@ var UncommonList = [
 	");
 	$stmt->execute();
 ?>
-var RareList = [
+	Rare:[
 <?php
 	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
 ?>
-	{
-		Id:<?=$col['id']?>,
-		Rank:<?=$col['rank']?>,
-		Lv:<?=$col['lv']?>,
-		Name:"<?=$col['name']?>",
-		Type:<?=$col['type']?>,
-		Class:"<?=$col['class']?>"
-	},
+		{
+			Id:<?=$col['id']?>,
+			Rank:<?=$col['rank']?>,
+			Lv:<?=$col['lv']?>,
+			Name:"<?=$col['name']?>",
+			Type:<?=$col['type']?>,
+			Class:"<?=$col['class']?>"
+		},
 <?php
 	}
 ?>
-];
-<?php
-		//legacy
-		$stmt = $dbh->prepare("
-		SELECT 
-			i.id,
-			i.lv,
-			ir.code as rank,
-			it.code as type,
-			CONCAT(\"レガシー:\",i.name) as name,
-			CONCAT(ir.class,\" \",it.class) as class
-		FROM 
-			item as i
-		LEFT OUTER JOIN
-			itemrank as ir
-			ON i.rank=ir.id
-		LEFT OUTER JOIN
-			itemtype as it
-			ON i.type=it.id
-		WHERE
-			i.rank=2
-		ORDER BY
-			i.type,
-			i.lv;
-	");
-	$stmt->execute();
-?>
-var LegacyList = [
-<?php
-	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
-?>
-	{
-		Id:<?=$col['id']?>,
-		Rank:<?=$col['rank']?>,
-		Lv:<?=$col['lv']?>,
-		Name:"<?=$col['name']?>",
-		Type:<?=$col['type']?>,
-		Class:"<?=$col['class']?>"
-	},
-<?php
-	}
-?>
-];
+	],
 <?php
 		//80epic
 		$stmt = $dbh->prepare("
@@ -234,30 +151,82 @@ var LegacyList = [
 		WHERE
 			i.rank=3 AND 
 			i.lv=80 AND
-			i.characteristic=0
+			i.characteristic=0 AND
+			i.type < 150
 		ORDER BY
 			i.type,
 			i.lv;
 	");
 	$stmt->execute();
 ?>
-var Epic80List = [
+	Epic80:[
 <?php
 	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
 ?>
-	{
-		Id:<?=$col['id']?>,
-		Rank:<?=$col['rank']?>,
-		Lv:<?=$col['lv']?>,
-		Name:"<?=$col['name']?>",
-		Type:<?=$col['type']?>,
-		Class:"<?=$col['class']?>",
-		Count:0
-	},
+		{
+			Id:<?=$col['id']?>,
+			Rank:<?=$col['rank']?>,
+			Lv:<?=$col['lv']?>,
+			Name:"<?=$col['name']?>",
+			Type:<?=$col['type']?>,
+			Class:"<?=$col['class']?>",
+			Count:0,
+			Bit:0
+		},
 <?php
 	}
 ?>
-];
+	],
+
+
+<?php
+		//80epic sp
+		$stmt = $dbh->prepare("
+		SELECT 
+			i.id,
+			i.lv,
+			ir.code as rank,
+			it.code as type,
+			i.name,
+			CONCAT(ir.class,\" \",it.class) as class
+		FROM 
+			item as i
+		LEFT OUTER JOIN
+			itemrank as ir
+			ON i.rank=ir.id
+		LEFT OUTER JOIN
+			itemtype as it
+			ON i.type=it.id
+		WHERE
+			i.rank=3 AND 
+			i.lv=80 AND
+			i.characteristic=0 AND
+			i.type >= 150
+		ORDER BY
+			i.type,
+			i.lv;
+	");
+	$stmt->execute();
+?>
+	Epic80Sp:[
+<?php
+	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
+?>
+		{
+			Id:<?=$col['id']?>,
+			Rank:<?=$col['rank']?>,
+			Lv:<?=$col['lv']?>,
+			Name:"<?=$col['name']?>",
+			Type:<?=$col['type']?>,
+			Class:"<?=$col['class']?>",
+			Count:0,
+			Bit:0
+		},
+<?php
+	}
+?>
+	],
+
 <?php
 		//85epic
 		$stmt = $dbh->prepare("
@@ -279,27 +248,79 @@ var Epic80List = [
 		WHERE
 			i.rank=3 AND 
 			i.lv=85 AND
-			i.characteristic=0
+			i.characteristic=0 AND
+			i.type < 150
 		ORDER BY
 			i.type,
 			i.lv;
 	");
 	$stmt->execute();
 ?>
-var Epic85List = [
+	Epic85:[
 <?php
 	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
 ?>
-	{
-		Id:<?=$col['id']?>,
-		Rank:<?=$col['rank']?>,
-		Lv:<?=$col['lv']?>,
-		Name:"<?=$col['name']?>",
-		Type:<?=$col['type']?>,
-		Class:"<?=$col['class']?>",
-		Count:0
-	},
+		{
+			Id:<?=$col['id']?>,
+			Rank:<?=$col['rank']?>,
+			Lv:<?=$col['lv']?>,
+			Name:"<?=$col['name']?>",
+			Type:<?=$col['type']?>,
+			Class:"<?=$col['class']?>",
+			Count:0,
+			Bit:0
+		},
 <?php
 	}
 ?>
-];
+	],
+
+
+<?php
+		//85epic sp
+		$stmt = $dbh->prepare("
+		SELECT 
+			i.id,
+			i.lv,
+			ir.code as rank,
+			it.code as type,
+			i.name,
+			CONCAT(ir.class,\" \",it.class) as class
+		FROM 
+			item as i
+		LEFT OUTER JOIN
+			itemrank as ir
+			ON i.rank=ir.id
+		LEFT OUTER JOIN
+			itemtype as it
+			ON i.type=it.id
+		WHERE
+			i.rank=3 AND 
+			i.lv=85 AND
+			i.characteristic=0 AND
+			i.type >= 150
+		ORDER BY
+			i.type,
+			i.lv;
+	");
+	$stmt->execute();
+?>
+	Epic85Sp:[
+<?php
+	while($col = $stmt->fetch(PDO::FETCH_ASSOC)){
+?>
+		{
+			Id:<?=$col['id']?>,
+			Rank:<?=$col['rank']?>,
+			Lv:<?=$col['lv']?>,
+			Name:"<?=$col['name']?>",
+			Type:<?=$col['type']?>,
+			Class:"<?=$col['class']?>",
+			Count:0,
+			Bit:0
+		},
+<?php
+	}
+?>
+	]
+};

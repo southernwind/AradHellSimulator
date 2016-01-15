@@ -1,24 +1,37 @@
-/* global ItemRank,RareList,Epic80List,Epic85List,LegacyList,UncommonList */
-
+/* global ItemRank,ItemList  */
 var RATE = {
 	ITEM:{
-		EPIC:0.01,
-		LEGACY:0.03,
-		RARE:0.5,
-		UNCOMMON:1
+		EPIC:0.015,
+		RARE:1,
 	},
 	DIFFICULTY:{
 		HARD:0.5,
 		VERYHARD:1
 	},
-	LEVEL:{
-		LV85:0.25,
-		LV80:1
-	}
+	EPIC:{
+		LV85SP:ItemList.Epic85Sp.length / ((ItemList.Epic80.length * 8 + ItemList.Epic80Sp.length) * 2 + (ItemList.Epic85.length * 8 + ItemList.Epic85Sp.length)),
+		LV85:(ItemList.Epic85.length * 8 + ItemList.Epic85Sp.length) / ((ItemList.Epic80.length * 8 + ItemList.Epic80Sp.length) * 2 + (ItemList.Epic85.length * 8 + ItemList.Epic85Sp.length)),
+		LV80SP:((ItemList.Epic80Sp.length) * 2 + (ItemList.Epic85.length * 8 + ItemList.Epic85Sp.length)) / ((ItemList.Epic80.length * 8 + ItemList.Epic80Sp.length) * 2 + (ItemList.Epic85.length * 8 + ItemList.Epic85Sp.length)),
+		LV80:1,
+	},
 };
 var NUMBER_OF_ITEM = {
-	HARD:6,
-	VERYHARD:9
+	HARD:4,
+	VERYHARD:6
+};
+var NUMBER_OF_EPIC_BIT = {
+	NORMAL:5,
+	EXPART:6,
+	MASTER:8,
+	KING:9,
+	SLAYER:10
+};
+var RANK ={
+	NORMAL:0,
+	EXPART:1,
+	MASTER:2,
+	KING:3,
+	SLAYER:4
 };
 var DIFFICULTY = {
 	HARD:0,
@@ -35,12 +48,14 @@ $(function(){
 	var autoFlag = false;
 	var veryHardEvent = false;
 	var count = 0;
-	
+	var rank = judgeRank($("#rank").val());
 	
 	$("#veryHardEvent input").on("change",function(){
 		veryHardEvent = $(this).prop("checked");
 	});
-	
+	$("#rank").on("change",function(){
+		rank = judgeRank($(this).val());
+	});
 	
 	function drop(){
 		count++;
@@ -62,6 +77,16 @@ $(function(){
 				logText += "<span class=\"epic\">["+items[key].Name+"]</span>";
 				$(".icon-"+items[key].Id).html(numberImage(++items[key].Count)).parent().addClass("got");
 				epic($elem);
+			}
+			if(items[key].Rank === ItemRank.EpicBit){
+				$("#bit-"+items[key].Id + " span")
+					.css({width:Math.min(100,++items[key].base.Bit/10)+"%"})
+					.parents(".item")
+					.find(".itemIcon")
+					.attr({title:items[key].base.Name + " (" + items[key].base.Bit + "/ 1000)"});
+				if(items[key].base.Bit>=1000){
+					$("#bit-"+items[key].Id + " span").addClass("complete");
+				}
 			}
 		}
 		if(logText!==""){
@@ -127,23 +152,46 @@ $(function(){
 		var num_item = difficulty === DIFFICULTY.HARD ? NUMBER_OF_ITEM.HARD : NUMBER_OF_ITEM.VERYHARD;
 		//decide number of epic rate
 		var epic_rate = difficulty === DIFFICULTY.HARD ? RATE.ITEM.EPIC/2 : RATE.ITEM.EPIC;
+		//decide number of epic bit item
+		var num_epic_bit;
+		switch(rank){
+			case RANK.SLAYER:
+				num_epic_bit = NUMBER_OF_EPIC_BIT.SLAYER;
+				break;
+			case RANK.KING:
+				num_epic_bit = NUMBER_OF_EPIC_BIT.KING;
+				break;
+			case RANK.MASTER:
+				num_epic_bit = NUMBER_OF_EPIC_BIT.MASTER;
+				break;
+			case RANK.EXPART:
+				num_epic_bit = NUMBER_OF_EPIC_BIT.EXPART;
+				break;
+			case RANK.NORMAL:
+				num_epic_bit = NUMBER_OF_EPIC_BIT.NORMAL;
+				break;
+			
+		}
+		
+		for(i = 0; i < num_epic_bit; i++){
+			var tmp = item_get(ItemRank.Epic);
+			var epic = $.extend(true,{base:tmp},tmp);
+			epic.Name += "のかけら";
+			epic.Class = "epicBit";
+			epic.Rank = ItemRank.EpicBit;
+			result.push(epic);
+		}
 		
 		for(var i = 0; i < num_item; i++){
-			var rn_item = Math.random();
-			if(rn_item < epic_rate){
+			if(Math.random() < epic_rate){
 				//epic
 				result.push(item_get(ItemRank.Epic));
-			}else if(rn_item < RATE.ITEM.LEGACY){
-				//legacy
-				result.push(item_get(ItemRank.Legacy));
-			}else if(rn_item < RATE.ITEM.RARE){
+			}else{
 				//rare
 				result.push(item_get(ItemRank.Rare));
-			}else{
-				//uncommon
-				result.push(item_get(ItemRank.Uncommon));
 			}
 		}
+		
 		return result;
 	}
 	
@@ -151,20 +199,19 @@ $(function(){
 		var array = [];
 		switch(rank){
 			case ItemRank.Epic:
-				if(Math.random() < RATE.LEVEL.LV85){
-					array = Epic85List;
+				var mr = Math.random();
+				if(mr < RATE.EPIC.LV85SP){
+					array = ItemList.Epic85Sp;
+				}else if(mr < RATE.EPIC.LV85){
+					array = ItemList.Epic85;
+				}else if(mr < RATE.EPIC.LV80SP){
+					array = ItemList.Epic80Sp;
 				}else{
-					array = Epic80List;
+					array = ItemList.Epic80;
 				}
 				break;
-			case ItemRank.Legacy:
-				array = LegacyList;
-				break;
 			case ItemRank.Rare:
-				array = RareList;
-				break;
-			case ItemRank.Uncommon:
-				array = UncommonList;
+				array = ItemList.Rare;
 				break;
 			default:
 				return null;
@@ -189,5 +236,22 @@ $(function(){
 			}
 		}
 		return result;
+	}
+	
+	function judgeRank(str){
+		switch(str){
+			case "slayer":
+				return RANK.SLAYER;
+			case "king":
+				return RANK.KING;
+			case "master":
+				return RANK.MASTER;
+			case "expart":
+				return RANK.EXPART;
+			case "normal":
+				return RANK.NORMAL;
+			default:
+				return RANK.NORMAL;
+		}
 	}
 });

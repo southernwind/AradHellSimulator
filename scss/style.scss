@@ -173,7 +173,6 @@ $experimental-support-for-svg: true;
 		transition: all 0.2s ease-out;
 		-webkit-transition: all 0.2s ease-out;
 	}
-	
 	&.epic{
 		color:#FFB400;
 		background-image: url(../img/epicdrop.png);
@@ -185,6 +184,9 @@ $experimental-support-for-svg: true;
 		&:after{
 			z-index: 9;
 		}
+	}
+	&.epicBit,{
+		color:#967532;
 	}
 	&.rare,
 	&.legacy{
@@ -222,6 +224,20 @@ $experimental-support-for-svg: true;
 			}
 			.n1{
 				width:4px;
+			}
+			.epicBitBar{
+				height:3px;
+				margin-bottom:2px;
+				background-color:#FCEABB;
+				span{
+					display:block;
+					height:3px;
+					width:0;
+					background-color:#ec9d1c;
+					&.complete{
+						background-color:#FF5D5F;
+					}
+				}
 			}
 		}
 		.itemlv{

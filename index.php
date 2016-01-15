@@ -33,7 +33,7 @@
 	デザインセンスがないゆえ困っている。
 	助けていただきたい。
 	
-	VERYHARDエピック率1%(1回あたり9個ドロップするので1つ以上エピックがドロップする確率は1-(0.99^9)≒8.648%),HARDエピック率0.5％(同様に1-(0.995^6)≒2.96%)に設定してるんだけど、大体こんなもんだよね？もっと低いのかなーうーん。
+	VERYHARDエピック率1%(1回あたり9個ドロップするので1つ以上エピックがドロップする確率は(1-(0.985^6)≒8.669%),HARDエピック率(同様に1-(0.9925^4)≒2.966%)に設定してるんだけど、大体こんなもんだよね？もっと低いのかなーうーん。
 	ご意見募集中である。
 	xmi1996@gmail.comまでご意見賜りたくよろしく。
 	
@@ -67,7 +67,14 @@
 			<div class="controls">
 				<button id="drop">ドロップ</button>
 				<button id="autodrop">自動</button><br>
-				<label id="veryHardEvent"><input type="checkbox">ベリーハードイベント</label>
+				<label id="veryHardEvent"><input type="checkbox">ベリーハードイベント</label><br>
+				<select id="rank">
+					<option value="slayer">スレイヤー</option>
+					<option value="king">キング</option>
+					<option value="master">マスター</option>
+					<option value="expart">エキスパート</option>
+					<option value="normal">ノーマル</option>
+				</select>
 			</div>
 		</div>
 		<div id="chat">
@@ -76,7 +83,7 @@
 				<div class="log">
 					<span class="row">アラド戦記ヘルダンジョンのドロップシミュレーター。右下の自動、またはドロップボタンを押すとアイテムがドロップする。</span>
 					<span class="row">また、エピック率、ベリーハード率は体感で入れてあるため実際の確率とは異なる。</span>
-					<span class="row">レイド待ちの空き時間に作ったのでやや適当な部分有り。</span>
+					<span class="row">適当な部分なくなりました。</span>
 				</div>
 			</div>
 			<div class="box" id="generalLog">
