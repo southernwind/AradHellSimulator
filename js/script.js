@@ -1,7 +1,7 @@
 /* global ItemRank,ItemList  */
 var RATE = {
 	ITEM:{
-		EPIC:0.015,
+		EPIC:0.01,
 		RARE:1,
 	},
 	DIFFICULTY:{
