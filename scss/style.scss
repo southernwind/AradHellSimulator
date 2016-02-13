@@ -1,7 +1,6 @@
 @import "compass";
 @import "items";
 @import "sprite";
-@import "compass/reset";
 $experimental-support-for-svg: true;
 
 *{
@@ -12,6 +11,7 @@ $experimental-support-for-svg: true;
 	margin:5px 30px;
 }
 .main{
+	font-family:"MS UI Gothic";
 	overflow:hidden;
 	width:1040px;
 }
